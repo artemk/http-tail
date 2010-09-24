@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'optitron'
+require File.expand_path(File.dirname(__FILE__) + "/../lib/http_tail")
+
+class HttpTailRunner < Optitron::CLI
+  
+  class_opt 'port', "Server port. Shouldnot be currently in use", :type => :numeric, :required => true
+  
+  #auth
+  class_opt 'user', "Username to use in http auth", :type => :string, :required => false
+  class_opt 'password', "Password to use in http auth",  :type => :string, :required => false
+  
+  #config
+  class_opt 'config', "Config file", :type => :string, :required => false
+   
+  desc "Start edge server"
+  def start_edge()
+    options = {}
+    puts @params.inspect
+    
+    if @params["config"]
+      config = YAML.load_file(@params["config"])
+      config.keys.each do |key|
+        options[key.to_sym] = config[key]
+      end
+    end
+    
+    ::HttpTail::Edge::Server.run(options)    
+  end
+  
+  desc "Start main server"  
+  def start_server()
+    options = {}
+    puts @params.inspect
+    
+    if @params["config"]
+      config = YAML.load_file(@params["config"])
+      config.keys.each do |key|
+        options[key.to_sym] = config[key]
+      end
+    end
+    
+    ::HttpTail::Server::Server.run(options)    
+  end
+end
+
+
+HttpTailRunner.dispatch
+

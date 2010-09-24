@@ -1,0 +1,14 @@
+The idea is inspired from clarity gem.
+
+This one can work with multiple amount of servers(edge). Communication with edges works with a help of websockets.
+
+-------------
+Instalation
+-------------
+
+sudo gem isntall http-tail
+
+
+-------------
+Usage example
+-------------
